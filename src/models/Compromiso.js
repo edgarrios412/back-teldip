@@ -17,6 +17,22 @@ module.exports = (sequelize) => {
     date: {
       type: DataTypes.DATEONLY,
       allowNull: true,
+    },
+    menorname:{
+        type: DataTypes.STRING,
+        allowNull:true,
+    },
+    menorcedula:{
+        type: DataTypes.STRING,
+        allowNull:true,
+    },
+    profesional:{
+        type: DataTypes.STRING,
+        allowNull:true,
+    },
+    consultorio:{
+        type: DataTypes.STRING,
+        allowNull:true,
     }
   },{timestamps:false});
 };

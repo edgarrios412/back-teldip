@@ -12,8 +12,10 @@ module.exports = {
         const client = await Client.findOne({where:{
             id:data
         },
-        include: Evolucion
-        })
+        include: [
+            { model: Evolucion },
+            { model: Compromiso }
+        ]})
         return client
     },
     createClient: async (data) => {

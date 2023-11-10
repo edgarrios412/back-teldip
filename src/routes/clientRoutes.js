@@ -60,7 +60,7 @@ clientRoutes.post("/compromiso", async (req,res) => {
     }
 })
 
-clientRoutes.post("/consen/:id", async (req,res) => {
+clientRoutes.get("/consen/:id", async (req,res) => {
     try{
         const response = await findConsen(req.params.id)
         res.json(response)

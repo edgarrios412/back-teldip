@@ -45,5 +45,9 @@ module.exports = {
         const compromiso = await Compromiso.create(data)
         await client.addCompromiso(compromiso)
         return "Exitoso"
+    },
+    findConsen: async (id) => {
+        const consen = await Compromiso.findByPk(id)
+        return consen
     }
 }

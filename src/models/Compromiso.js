@@ -17,6 +17,7 @@ module.exports = (sequelize) => {
     date: {
       type: DataTypes.DATEONLY,
       allowNull: true,
+      defaultValue: new Date()
     },
     menorname:{
         type: DataTypes.STRING,

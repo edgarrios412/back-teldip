@@ -2,7 +2,10 @@ const {Client, Evolucion, Compromiso} = require("../db")
 
 module.exports = {
     getClients: async () => {
-        const clients = await Client.findAll({include: Evolucion})
+        const clients = await Client.findAll({include: [
+            { model: Evolucion },
+            { model: Compromiso }
+          ]})
         return clients
     },
     getClientId: async (data) => {

@@ -6,6 +6,10 @@ module.exports = (sequelize) => {
       primaryKey:true,
       autoIncrement:true,
     },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     cedula: {
       type: DataTypes.STRING,
       allowNull: true,

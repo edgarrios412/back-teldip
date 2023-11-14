@@ -55,5 +55,10 @@ module.exports = {
     getUsers: async () => {
         const users = await User.findAll()
         return users
+    },
+    deleteUser: async (id) => {
+        const user = await User.findOne({where:{id:id}})
+        await user.destroy()
+        return "Usuario eliminado"
     }
 }

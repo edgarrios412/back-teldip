@@ -6,10 +6,11 @@ calendarRoutes.get("/:id", async (req,res) => {
     try{
         if(req.params.id == "all"){
             const dates = await getDates()
+            res.json(dates)
         }else{
             const dates = await getDatesById(req.params.id) 
+            res.json(dates)
         }
-        res.json(dates)
     }
     catch(error){
         console.log(error)

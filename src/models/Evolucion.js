@@ -22,6 +22,10 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    precio:{
+      type:DataTypes.INTEGER,
+      allowNull:true
+    },
     url: {
       type: DataTypes.STRING,
       allowNull: true,

@@ -6,6 +6,10 @@ module.exports = (sequelize) => {
       primaryKey:true,
       autoIncrement:true,
     },
+    saldo:{
+      type:DataTypes.INTEGER,
+      allowNull:true,
+    },
     image: {
       type: DataTypes.STRING,
       allowNull: true,

@@ -9,6 +9,7 @@ module.exports = (sequelize) => {
     saldo:{
       type:DataTypes.INTEGER,
       allowNull:true,
+      defaultValue:0,
     },
     image: {
       type: DataTypes.STRING,

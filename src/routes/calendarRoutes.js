@@ -1,10 +1,14 @@
 const {Router} = require("express")
 const calendarRoutes = Router()
-const {getDates, postDate, deleteDate} = require("../controllers/calendarController")
+const {getDates, postDate, deleteDate, getDatesById} = require("../controllers/calendarController")
 
-calendarRoutes .get("/", async (req,res) => {
+calendarRoutes.get("/:id", async (req,res) => {
     try{
-        const dates = await getDates()
+        if(req.params.id == "all"){
+            const dates = await getDates()
+        }else{
+            const dates = await getDatesById(req.params.id) 
+        }
         res.json(dates)
     }
     catch(error){

@@ -21,6 +21,10 @@ module.exports = (sequelize) => {
     end: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    especialista:{
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   },{timestamps:false});
 };

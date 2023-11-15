@@ -5,6 +5,12 @@ module.exports = {
         const dates = await Calendar.findAll()
         return dates
     },
+    getDatesById: async (id) => {
+        const dates = await Calendar.findAll({where:{
+            especialista:id
+        }})
+        return dates
+    },
     postDate: async (data) => {
         await Calendar.create(data)
         return "Creado exitosamente"

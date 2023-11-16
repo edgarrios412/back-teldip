@@ -87,4 +87,13 @@ clientRoutes.get("/consen/:id", async (req,res) => {
     }
 })
 
+clientRoutes.get("/cotizaciones", async (req,res) => {
+    try{
+        const response = await getCoti()
+        res.json(response)
+    }catch(error){
+        console.log(error)
+    }
+})
+
 module.exports = clientRoutes

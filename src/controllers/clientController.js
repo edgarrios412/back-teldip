@@ -59,5 +59,9 @@ module.exports = {
     findCoti: async (id) => {
         const consen = await Cotizacion.findByPk(id)
         return consen
+    },
+    getCoti: async () => {
+        const consen = await Cotizacion.findAll()
+        return consen
     }
 }

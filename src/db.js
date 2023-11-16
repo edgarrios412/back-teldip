@@ -30,7 +30,7 @@ let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { Client, Evolucion, Compromiso } = sequelize.models;
+const { Client, Evolucion, Compromiso, Cotizacion} = sequelize.models;
 
 // const packChar = sequelize.define('pack_char', {
 //   // Definición de otros campos de la tabla intermedia
@@ -48,6 +48,9 @@ Evolucion.belongsTo(Client)
 
 Client.hasMany(Compromiso)
 Compromiso.belongsTo(Client)
+
+Client.hasMany(Cotizacion)
+Cotizacion.belongsTo(Client)
 
   module.exports = {
     ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

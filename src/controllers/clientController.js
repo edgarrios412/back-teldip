@@ -1,4 +1,4 @@
-const {Client, Evolucion, Compromiso} = require("../db")
+const {Client, Evolucion, Compromiso, Cotizacion} = require("../db")
 
 module.exports = {
     getClients: async () => {
@@ -44,6 +44,12 @@ module.exports = {
         const client = await Client.findByPk(data.clientId)
         const compromiso = await Compromiso.create(data)
         await client.addCompromiso(compromiso)
+        return "Exitoso"
+    },
+    newCotizacion: async (data) => {
+        const client = await Client.findByPk(data.clientId)
+        const cotizacion = await Cotizacion.create(data)
+        await client.addCotizacion(cotizacion)
         return "Exitoso"
     },
     findConsen: async (id) => {

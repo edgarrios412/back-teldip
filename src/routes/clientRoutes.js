@@ -1,6 +1,6 @@
 const {Router} = require("express")
 const clientRoutes = Router()
-const {getClientId, getClients, createClient, editClient, newEvolucion, newCompromiso, findConsen, newCotizacion, findCoti} = require("../controllers/clientController")
+const {getClientId, getClients, createClient, editClient, newEvolucion, newCompromiso, findConsen, newCotizacion, findCoti, getCoti} = require("../controllers/clientController")
 
 clientRoutes.get("/:id", async (req,res) => {
     const {id} = req.params

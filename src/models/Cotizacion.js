@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
       allowNull: true,
     },
     proced: {
-      type: DataTypes.ARRAY,
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
       allowNull: true,
     }
   },{timestamps:false});

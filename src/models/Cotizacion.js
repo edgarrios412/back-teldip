@@ -13,6 +13,10 @@ module.exports = (sequelize) => {
     proced: {
       type: DataTypes.ARRAY(DataTypes.JSON),
       allowNull: true,
+    },
+    price:{
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
     }
   },{timestamps:false});
 };

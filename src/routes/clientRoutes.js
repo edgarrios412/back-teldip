@@ -87,7 +87,7 @@ clientRoutes.get("/consen/:id", async (req,res) => {
     }
 })
 
-clientRoutes.get("/cotizaciones", async (req,res) => {
+clientRoutes.get("/cotizaciones/all", async (req,res) => {
     try{
         const response = await getCoti()
         res.json(response)

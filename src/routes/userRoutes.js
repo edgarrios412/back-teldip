@@ -23,13 +23,13 @@ userRoutes.post("/verify", async (req,res) => {
     }
 })
 
-userRoutes.post("/auth", (req,res) => {
+userRoutes.post("/auth", async (req,res) => {
     try{
-    const {status, user} = authUser(req.body)
-    res.json({status:status, user:user})
+    const token = await authUser(req.body)
+    res.json({token})
     }
     catch(error){
-        console.log(error)
+        res.status(403).json(error.message)
     }
 })
 

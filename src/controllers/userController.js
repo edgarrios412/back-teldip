@@ -14,7 +14,7 @@ module.exports = {
         password: data.password,
       },
     });
-    if (!user.length) throw new Error("El usuario no existe");
+    if (!user.length) throw new Error("Las credenciales no son correctas");
     const token = createToken({id:2});
     return token;
   },

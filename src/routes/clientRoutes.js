@@ -5,7 +5,7 @@ const path = require("node:path");
 const { createUserLog } = require("../controllers/userLogController");
 
 clientRoutes.get("/test", async (req, res) => {
-  await createUserLog(req, "Ingreso a test");
+  // await createUserLog(req, "Ingreso a test");
   res.json({ status: true });
 });
 

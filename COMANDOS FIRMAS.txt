@@ -1,0 +1,7 @@
+Generar certificado y key .pem
+
+openssl req -x509 -newkey rsa:2040 -nodes -keyout KeyEdgar.pem -out certEdgar.pem -days 365
+
+Para generar el p12
+
+openssl pkcs12 -export -out Edgar.p12 -inkey KeyEdgar.pem -in certEdgar.pem

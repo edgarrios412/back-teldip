@@ -1,6 +1,6 @@
 const app = require("./src/app")
 const {conn} = require("./src/db")
-const PORT = 3001 || process.env.PORT
+const PORT = process.env.PORT || 3001;
 
 conn.sync({alter:true}).then(() => {
     console.log("Conectado a la base de datos")

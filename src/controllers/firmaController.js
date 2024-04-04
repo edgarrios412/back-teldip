@@ -46,13 +46,13 @@ module.exports = {
                 signatureLength: 4000 - 6,
                 rangePlaceHolder: 9999999,
                 signatureComputer: {
-                    certificate: await fs.readFile('Edgar.p12'),
-                    password: 'edgarrios'
+                    certificate: await fs.readFile('Teldip.p12'),
+                    password: 'teldip'
                 }
             };
             
             const filePath = 'uploads/pdf-sample.pdf'; 
-            const filePathVerify = 'documento-firmado-ultimodd2.pdf';
+            const filePathVerify = 'firmado3.pdf';
             
             const pdfSigner = new PdfSigner(settings);
     

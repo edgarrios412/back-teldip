@@ -24,7 +24,7 @@ module.exports = {
     const token = createToken({id:user.id});
     const log = await Userlog.create({accion:`El usuario ha ingresado a la plataforma`})
     await user.addUserlog(log)
-    return token;
+    return {user, token};
   },
   putUser: async (data) => {
     let user;

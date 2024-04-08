@@ -1,21 +1,24 @@
-const { User } = require("../db");
+const { User, Ticket, Userlog } = require("../db");
 const jwt = require("jsonwebtoken");
 const { createToken } = require("../helpers/jwt");
+const { encryptPassword, verifyPassword } = require("../helpers/encryptPassword");
 
 module.exports = {
   newUser: async (data) => {
-    await User.create(data);
-    return "Usuario creado";
+    const passwordEncripted = encryptPassword(data.password)
+    await User.create({...data, password:passwordEncripted});
+    return "Usuario creado exitosamente";
   },
   authUser: async (data) => {
-    const user = await User.findAll({
+    const user = await User.findOne({
       where: {
         email: data.email,
-        password: data.password,
       },
     });
-    if (!user.length) throw new Error("Las credenciales no son correctas");
-    const token = createToken({id:2});
+    if (!verifyPassword(data.password,user.password)) throw new Error("Las credenciales no son correctas");
+    const token = createToken({id:user.id});
+    const log = await Userlog.create({accion:`El usuario ha ingresado a la plataforma`})
+    await user.addUserlog(log)
     return token;
   },
   putUser: async (data) => {
@@ -52,4 +55,10 @@ module.exports = {
     await user.destroy();
     return "Usuario eliminado";
   },
+  createTicket: async (body) => {
+    const ticket = await Ticket.create({message:body.message})
+    const user = await User.findByPk(body.userId)
+    user.addTicket(ticket)
+    return "Ticket creado exitosamente"
+  }
 };

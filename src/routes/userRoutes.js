@@ -1,6 +1,6 @@
 const {Router} = require("express")
 const userRoutes = Router()
-const {newUser, verifyUser, authUser, putUser, getUsers, deleteUser} = require("../controllers/userController")
+const {newUser, verifyUser, authUser, putUser, getUsers, deleteUser, createTicket} = require("../controllers/userController")
 
 userRoutes.get("/", async (req,res) => {
     try{
@@ -37,6 +37,16 @@ userRoutes.post("/", async (req,res) => {
     try{
         const user = await newUser(req.body)
         res.json({users:user})
+    }
+    catch(error){
+        console.log(error)
+    }
+})
+
+userRoutes.post("/ticket", async (req,res) => {
+    try{
+        const ticket = await createTicket(req.body)
+        res.json({response:ticket})
     }
     catch(error){
         console.log(error)

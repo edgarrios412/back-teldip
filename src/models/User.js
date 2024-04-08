@@ -17,7 +17,7 @@ module.exports = (sequelize) => {
       defaultValue:1,
     },
     phone:{
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     name:{

@@ -1,6 +1,6 @@
 const {Router} = require("express")
 const userRoutes = Router()
-const {newUser, verifyUser, authUser, putUser, getUsers, deleteUser, createTicket} = require("../controllers/userController")
+const {newUser, verifyUser, authUser, putUser, getUsers, deleteUser, createTicket, changePassword} = require("../controllers/userController")
 
 userRoutes.get("/", async (req,res) => {
     try{
@@ -9,7 +9,7 @@ userRoutes.get("/", async (req,res) => {
 
     }
     catch(error){
-        console.log(error)
+        res.status(403).json(error.message)
     }
 })
 
@@ -19,7 +19,7 @@ userRoutes.post("/verify", async (req,res) => {
     res.json({status:status,user:user, token:token})
     }
     catch(error){
-        console.log(error)
+        res.status(403).json(error.message)
     }
 })
 
@@ -39,7 +39,7 @@ userRoutes.post("/", async (req,res) => {
         res.json({users:user})
     }
     catch(error){
-        console.log(error)
+        res.status(403).json(error.message)
     }
 })
 
@@ -49,7 +49,7 @@ userRoutes.post("/ticket", async (req,res) => {
         res.json({response:ticket})
     }
     catch(error){
-        console.log(error)
+        res.status(403).json(error.message)
     }
 })
 
@@ -59,7 +59,17 @@ userRoutes.put("/", async (req,res) => {
     res.json({users:edit})
     }
     catch(error){
-        console.log(error)
+        res.status(403).json(error.message)
+    }
+})
+
+userRoutes.put("/password", async (req,res) => {
+    try{
+    const edit = await changePassword(req.body)
+    res.json({response:edit})
+    }
+    catch(error){
+        res.status(403).json(error.message)
     }
 })
 
@@ -69,7 +79,7 @@ userRoutes.delete("/:id", async (req,res) => {
     res.json({status:user})
     }
     catch(error){
-        console.log(error)
+        res.status(403).json(error.message)
     }
 })
 

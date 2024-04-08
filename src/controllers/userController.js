@@ -5,9 +5,13 @@ const { encryptPassword, verifyPassword } = require("../helpers/encryptPassword"
 
 module.exports = {
   newUser: async (data) => {
-    const passwordEncripted = encryptPassword(data.password)
-    await User.create({...data, password:passwordEncripted});
-    return "Usuario creado exitosamente";
+      const existMail = await User.findOne({where:{
+        email: data.email
+      }})
+      if(existMail) throw new Error ("El correo electronico ingresado ya existe")
+      const passwordEncripted = encryptPassword(data.password)
+      await User.create({...data, password:passwordEncripted});
+      return "Usuario creado exitosamente";
   },
   authUser: async (data) => {
     const user = await User.findOne({
@@ -15,6 +19,7 @@ module.exports = {
         email: data.email,
       },
     });
+    if(!user) throw new Error("Las credenciales no son correctas");
     if (!verifyPassword(data.password,user.password)) throw new Error("Las credenciales no son correctas");
     const token = createToken({id:user.id});
     const log = await Userlog.create({accion:`El usuario ha ingresado a la plataforma`})
@@ -45,6 +50,15 @@ module.exports = {
       return "Contraseña actualizada";
     }
     return "Contraseña anterior invalida";
+  },
+  changePassword: async(data) => {
+    const user = await User.findByPk(data.userId);
+    if(verifyPassword(data.password, user.password)){
+      const passwordEncripted = encryptPassword(data.newpassword)
+      user.password = passwordEncripted;
+      user.save();
+      return "Contraseña actualizada exitosamente"
+    } else throw new Error("La contraseña anterior es incorrecta")
   },
   getUsers: async () => {
     const users = await User.findAll();

@@ -1,6 +1,6 @@
-const { User, Ticket, Userlog } = require("../db");
+const { User, Ticket, Userlog, Notification, Historypay } = require("../db");
 const jwt = require("jsonwebtoken");
-const { createToken } = require("../helpers/jwt");
+const { createToken, decodeToken } = require("../helpers/jwt");
 const { encryptPassword, verifyPassword } = require("../helpers/encryptPassword");
 
 module.exports = {
@@ -13,11 +13,37 @@ module.exports = {
       await User.create({...data, password:passwordEncripted});
       return "Usuario creado exitosamente";
   },
+  getUser: async (id) => {
+    const user = await User.findByPk(id, {
+      include: [{
+         model: Historypay, // Asegúrate de importar el modelo de notificación
+      }]
+     })
+    if(!user) throw new Error("El usuario buscado no existe")
+    return user
+  },
+  getUserByToken: async (token) => {
+    const {id} = jwt.verify(token, "test")
+    const user = await User.findByPk(id, {
+      include: [{
+         model: Historypay, // Asegúrate de importar el modelo de notificación
+      },{
+        model: Ticket, // Asegúrate de importar el modelo de notificación
+     }]
+     })
+    if(!user) throw new Error("El usuario buscado no existe")
+    return user
+  },
   authUser: async (data) => {
     const user = await User.findOne({
       where: {
         email: data.email,
       },
+      include: [{
+        model: Historypay, // Asegúrate de importar el modelo de Historypay
+     },{
+      model: Ticket, // Asegúrate de importar el modelo de notificación
+   }]
     });
     if(!user) throw new Error("Las credenciales no son correctas");
     if (!verifyPassword(data.password,user.password)) throw new Error("Las credenciales no son correctas");
@@ -64,6 +90,21 @@ module.exports = {
     const users = await User.findAll();
     return users;
   },
+  getTickets: async () => {
+    const ticket = await Ticket.findAll();
+    return ticket;
+  },
+  getTicketById: async (id) => {
+    const ticket = await Ticket.findByPk(id);
+    return ticket;
+  },
+  setResponseTicket: async (body) => {
+    const ticket = await Ticket.findByPk(body.id);
+    if(!ticket) throw new Error("No existe ese ticket")
+    ticket.response = body.response
+    ticket.save()
+    return ticket;
+  },
   deleteUser: async (id) => {
     const user = await User.findOne({ where: { id: id } });
     await user.destroy();
@@ -74,5 +115,21 @@ module.exports = {
     const user = await User.findByPk(body.userId)
     user.addTicket(ticket)
     return "Ticket creado exitosamente"
+  },
+  createNotification: async (body) => {
+    const notification = await Notification.create(body)
+    const user = await User.findByPk(body.userId)
+    user.addNotification(notification)
+    return "Notificacion creada exitosamente"
+  },
+  addHistorial: async (body) => {
+    const historypay = await Historypay.create(body)
+    const user = await User.findByPk(body.userId)
+    if(body.status){
+      user.balance = Number(user.balance)+Number(body.amount)
+      user.save()
+    }
+    user.addHistorypay(historypay)
+    return "Historial agregado exitosamente"
   }
 };

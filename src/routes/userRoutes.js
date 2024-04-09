@@ -1,12 +1,52 @@
 const {Router} = require("express")
 const userRoutes = Router()
-const {newUser, verifyUser, authUser, putUser, getUsers, deleteUser, createTicket, changePassword} = require("../controllers/userController")
+const {newUser, verifyUser, authUser, putUser, getUsers, getUser, getUserByToken, deleteUser, createTicket, changePassword, createNotification, addHistorial, setResponseTicket, getTickets} = require("../controllers/userController")
 
 userRoutes.get("/", async (req,res) => {
     try{
         const users = await getUsers()
         res.json(users)
 
+    }
+    catch(error){
+        res.status(403).json(error.message)
+    }
+})
+
+userRoutes.get("/:id", async (req,res) => {
+    try{
+        const user = await getUser(req.params.id)
+        res.json(user)
+    }
+    catch(error){
+        res.status(403).json(error.message)
+    }
+})
+
+userRoutes.get("/ticket/listar", async (req,res) => {
+    try{
+        const user = await getTickets()
+        res.json(user)
+    }
+    catch(error){
+        res.status(403).json(error.message)
+    }
+})
+
+userRoutes.put("/ticket/response", async (req,res) => {
+    try{
+        const user = await setResponseTicket(req.body)
+        res.json(user)
+    }
+    catch(error){
+        res.status(403).json(error.message)
+    }
+})
+
+userRoutes.get("/token/:token", async (req,res) => {
+    try{
+        const user = await getUserByToken(req.params.token)
+        res.json(user)
     }
     catch(error){
         res.status(403).json(error.message)
@@ -47,6 +87,16 @@ userRoutes.post("/ticket", async (req,res) => {
     try{
         const ticket = await createTicket(req.body)
         res.json({response:ticket})
+    }
+    catch(error){
+        res.status(403).json(error.message)
+    }
+})
+
+userRoutes.post("/historial", async (req,res) => {
+    try{
+        const historial = await addHistorial(req.body)
+        res.json({response:historial})
     }
     catch(error){
         res.status(403).json(error.message)

@@ -1,23 +1,27 @@
 const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
-  sequelize.define('ticket', {
+  sequelize.define('notification', {
     id:{
       type: DataTypes.INTEGER,
       primaryKey:true,
       autoIncrement:true,
     },
-    date: {
-      type: DataTypes.DATEONLY,
+    from: {
+      type: DataTypes.DATE,
       allowNull: true,
       defaultValue: new Date()
     },
     message: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: true,
     },
-    response:{
-      type: DataTypes.TEXT,
+    read: {
+      type: DataTypes.BOOLEAN,
       allowNull: true,
-    }
+    },
+    date: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
+    },
   },{timestamps:false});
 };

@@ -7,9 +7,9 @@ module.exports = (sequelize) => {
       autoIncrement:true,
     },
     date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: true,
-      defaultValue: new Date()
+      defaultValue: () => new Date()
     },
     message: {
       type: DataTypes.TEXT,
@@ -18,6 +18,10 @@ module.exports = (sequelize) => {
     response:{
       type: DataTypes.TEXT,
       allowNull: true,
-    }
+    },
+    responseDate:{
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },{timestamps:false});
 };

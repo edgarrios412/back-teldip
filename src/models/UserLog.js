@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
     fecha: {
       type: DataTypes.DATEONLY,
       allowNull: true,
-      defaultValue: new Date()
+      defaultValue: () => new Date()
     },
     accion: {
       type: DataTypes.STRING,

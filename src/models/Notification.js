@@ -6,11 +6,6 @@ module.exports = (sequelize) => {
       primaryKey:true,
       autoIncrement:true,
     },
-    from: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: new Date()
-    },
     message: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -18,10 +13,12 @@ module.exports = (sequelize) => {
     read: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
+      defaultValue:false
     },
     date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: true,
+      defaultValue: () => new Date()
     },
   },{timestamps:false});
 };

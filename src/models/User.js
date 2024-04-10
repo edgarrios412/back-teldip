@@ -40,6 +40,11 @@ module.exports = (sequelize) => {
     password:{
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    createdDate:{
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: () => new Date()
     }
   },{timestamps:false});
 };

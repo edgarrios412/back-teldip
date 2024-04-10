@@ -22,7 +22,7 @@ module.exports = (sequelize) => {
     date: {
       type: DataTypes.DATE,
       allowNull: true,
-      defaultValue: new Date()
+      defaultValue: () => new Date()
     },
   },{timestamps:false});
 };

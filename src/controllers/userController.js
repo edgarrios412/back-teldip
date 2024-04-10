@@ -141,7 +141,9 @@ module.exports = {
     ticket.response = body.response;
     ticket.responseDate = new Date();
     ticket.save();
-    const notification = await Notification.create({message:"Tu ticket ha sido respondido"});
+    const notification = await Notification.create({
+      message: "Tu ticket ha sido respondido",
+    });
     const user = await User.findByPk(ticket.userId);
     user.addNotification(notification);
     return ticket;
@@ -166,5 +168,13 @@ module.exports = {
     }
     user.addHistorypay(historypay);
     return "Historial agregado exitosamente";
+  },
+  readAllNotification: async (userId) => {
+    const notifications = await Notification.findAll({ where: { userId: userId } });
+    for(let i = 0; i < notifications.length;i++){
+      notifications[i].read = true
+      notifications[i].save()
+    }
+    return "Todas las notificaciones fueron marcadas como leidas";
   },
 };

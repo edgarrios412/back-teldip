@@ -1,6 +1,6 @@
 const {Router} = require("express")
 const userRoutes = Router()
-const {newUser, verifyUser, authUser, putUser, getUsers, getUser, getUserByToken, deleteUser, createTicket, changePassword, createNotification, addHistorial, setResponseTicket, getTickets} = require("../controllers/userController")
+const {newUser, readAllNotification, verifyUser, authUser, putUser, getUsers, getUser, getUserByToken, deleteUser, createTicket, changePassword, createNotification, addHistorial, setResponseTicket, getTickets} = require("../controllers/userController")
 
 userRoutes.get("/", async (req,res) => {
     try{
@@ -116,6 +116,16 @@ userRoutes.put("/", async (req,res) => {
 userRoutes.put("/password", async (req,res) => {
     try{
     const edit = await changePassword(req.body)
+    res.json({response:edit})
+    }
+    catch(error){
+        res.status(403).json(error.message)
+    }
+})
+
+userRoutes.put("/notificaciones/readAll", async (req,res) => {
+    try{
+    const edit = await readAllNotification(req.body.userId)
     res.json({response:edit})
     }
     catch(error){

@@ -1,4 +1,4 @@
-const { User, Ticket, Userlog, Notification, Historypay } = require("../db");
+const { User, Ticket, Userlog, Notification, Historypay, Apikey } = require("../db");
 const jwt = require("jsonwebtoken");
 const { createToken, decodeToken } = require("../helpers/jwt");
 const {
@@ -24,6 +24,14 @@ module.exports = {
     user.addNotification(notification);
     return "Notificacion creada exitosamente";
   },
+  generateKey: async ({userId, serviceId, plan}) => {
+    const user = await User.findByPk(userId, {include:[{model:Apikey}]})
+    if(!user) throw new Error("El usuario no existe")
+    if(user.apikeys.filter(a => a.serviceId == serviceId).length) throw new Error("Ya tienes un servicio contratado, contacta a soporte para actualizar tu plan")
+    const api = await Apikey.create({serviceId,plan})
+    user.addApikey(api)
+    return api
+},
   getUser: async (id) => {
     const user = await User.findByPk(id, {
       include: [
@@ -32,6 +40,9 @@ module.exports = {
         },
         {
           model: Notification, // Asegúrate de importar el modelo de notificación
+        },
+        {
+          model: Apikey, // Asegúrate de importar el modelo de notificación
         },
       ],
     });
@@ -50,6 +61,9 @@ module.exports = {
         },
         {
           model: Notification, // Asegúrate de importar el modelo de notificación
+        },
+        {
+          model: Apikey, // Asegúrate de importar el modelo de notificación
         },
       ],
     });
@@ -70,6 +84,9 @@ module.exports = {
         },
         {
           model: Notification, // Asegúrate de importar el modelo de notificación
+        },
+        {
+          model: Apikey, // Asegúrate de importar el modelo de notificación
         },
       ],
     });

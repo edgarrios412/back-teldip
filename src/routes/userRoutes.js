@@ -1,6 +1,6 @@
 const {Router} = require("express")
 const userRoutes = Router()
-const {newUser, readAllNotification, verifyUser, authUser, putUser, getUsers, getUser, getUserByToken, deleteUser, createTicket, changePassword, createNotification, addHistorial, setResponseTicket, getTickets} = require("../controllers/userController")
+const {newUser, readAllNotification, verifyUser, authUser, putUser, getUsers, getUser, getUserByToken, deleteUser, createTicket, changePassword, createNotification, addHistorial, setResponseTicket, getTickets, generateKey} = require("../controllers/userController")
 
 userRoutes.get("/", async (req,res) => {
     try{
@@ -97,6 +97,16 @@ userRoutes.post("/historial", async (req,res) => {
     try{
         const historial = await addHistorial(req.body)
         res.json({response:historial})
+    }
+    catch(error){
+        res.status(403).json(error.message)
+    }
+})
+
+userRoutes.post("/service/generateKey", async (req,res) => {
+    try{
+        const key = await generateKey(req.body)
+        res.json(key)
     }
     catch(error){
         res.status(403).json(error.message)

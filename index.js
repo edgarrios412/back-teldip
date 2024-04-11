@@ -7,4 +7,4 @@ conn.sync({alter:true}).then(() => {
     app.listen(PORT, () => {
         console.log("Servidor en linea en el puerto "+PORT)
     })
-})
+}, (e) => console.log("Ha ocurrido un error al sincronizar la base de datos: ",e))

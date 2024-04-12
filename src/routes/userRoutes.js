@@ -1,6 +1,7 @@
 const {Router} = require("express")
 const userRoutes = Router()
 const {newUser, readAllNotification, verifyUser, authUser, putUser, getUsers, getUser, getUserByToken, deleteUser, createTicket, changePassword, createNotification, addHistorial, setResponseTicket, getTickets, generateKey} = require("../controllers/userController")
+const { sendMail } = require("../helpers/nodeMailer")
 
 userRoutes.get("/", async (req,res) => {
     try{
@@ -11,6 +12,11 @@ userRoutes.get("/", async (req,res) => {
     catch(error){
         res.status(403).json(error.message)
     }
+})
+
+userRoutes.post("/mail", async(req,res) => {
+    await sendMail("edgarrios412@gmail.com")
+    res.json({Hola:"A"})
 })
 
 userRoutes.get("/:id", async (req,res) => {

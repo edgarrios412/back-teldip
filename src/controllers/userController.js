@@ -1,6 +1,7 @@
 const { User, Ticket, Userlog, Notification, Historypay, Apikey } = require("../db");
 const jwt = require("jsonwebtoken");
 const { createToken, decodeToken } = require("../helpers/jwt");
+const {v4:uuidv4} = require("uuid")
 const {
   encryptPassword,
   verifyPassword,
@@ -17,6 +18,27 @@ module.exports = {
     const passwordEncripted = encryptPassword(data.password);
     await User.create({ ...data, password: passwordEncripted });
     return "Usuario creado exitosamente";
+  },
+  bulkCreateUser: async (userArray) => {
+    for(let i = 0; i < userArray.length; i++){
+      const existMail = await User.findOne({
+        where: {
+          email: userArray[i].correo,
+        },
+      });
+      if (existMail) throw new Error("El correo electronico ingresado ya existe: "+userArray[i].correo);
+    }
+    const usuarios = userArray.map(u => {
+      return {
+        name:u.nombres,
+        lastname:u.apellidos,
+        email:u.correo,
+        password:encryptPassword(u.clave.toString()),
+        phone:u.telefono,
+        serial: uuidv4(),
+    }})
+    await User.bulkCreate(usuarios);
+    return "Usuarios creados exitosamente";
   },
   createNotification: async (body) => {
     const notification = await Notification.create(body);
@@ -185,6 +207,11 @@ module.exports = {
     }
     user.addHistorypay(historypay);
     return "Historial agregado exitosamente";
+  },
+  getUserBySerial: async (serial) => {
+    const user = await User.findOne({where:{serial}});
+    if (!user) throw new Error("El usuario buscado no existe");
+    return user;
   },
   readAllNotification: async (userId) => {
     const notifications = await Notification.findAll({ where: { userId: userId } });

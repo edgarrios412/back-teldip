@@ -5,11 +5,13 @@ const testRoutes = require("./testRoutes")
 // const { isAuthenticated } = require("../helpers/jwt")
 const {validateApiKey} = require("../helpers/apiKey")
 const servicesRoutes = require("./servicesRoutes")
+const fileRoutes = require("./fileRoutes")
 const indexRoutes = Router()
 
 indexRoutes.use("/user", userRoutes)
 indexRoutes.use("/test", testRoutes)
 indexRoutes.use("/client", clientRoutes)
+indexRoutes.use("/file", fileRoutes)
 indexRoutes.use("/services",validateApiKey ,servicesRoutes)
 // indexRoutes.use("/client",isAuthenticated, clientRoutes)
 

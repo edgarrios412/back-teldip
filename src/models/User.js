@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+
 module.exports = (sequelize) => {
   sequelize.define('user', {
     id:{
@@ -6,6 +7,11 @@ module.exports = (sequelize) => {
       primaryKey:true,
       autoIncrement:true,
     },
+    serial: {
+      type: DataTypes.UUID,
+      defaultValue: null,
+      allowNull: true,
+   },
     image: {
       type: DataTypes.STRING,
       allowNull: true,

@@ -12,7 +12,23 @@ fileRoutes.post("/excelToJson", upload.single("file"), async (req, res) => {
     } catch (e) {
       res.status(400).json(e.message);
     }
-  });
+});
+
+fileRoutes.post("/image/upload", upload.single("file"), async (req, res) => {
+  try {
+    res.status(200).json(req.file.path);
+  } catch (e) {
+    res.status(400).json(e.message);
+  }
+});
+
+fileRoutes.get("/image/:path", async (req, res) => {
+  try {
+      res.sendFile("C:\\Users\\User\\Desktop\\back-teldip\\uploads\\"+req.params.path);
+  } catch (error) {
+    res.status(400).json(error.message)
+  }
+})
 
 fileRoutes.post("/excelToJson/createUsers", upload.single("file"), async (req, res) => {
   try {

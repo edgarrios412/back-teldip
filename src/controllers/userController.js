@@ -1,11 +1,19 @@
-const { User, Ticket, Userlog, Notification, Historypay, Apikey } = require("../db");
+const {
+  User,
+  Ticket,
+  Userlog,
+  Notification,
+  Historypay,
+  Apikey,
+} = require("../db");
 const jwt = require("jsonwebtoken");
 const { createToken, decodeToken } = require("../helpers/jwt");
-const {v4:uuidv4} = require("uuid")
+const { v4: uuidv4 } = require("uuid");
 const {
   encryptPassword,
   verifyPassword,
 } = require("../helpers/encryptPassword");
+const { sendMailQRCode } = require("../helpers/nodeMailer");
 
 module.exports = {
   newUser: async (data) => {
@@ -20,24 +28,32 @@ module.exports = {
     return "Usuario creado exitosamente";
   },
   bulkCreateUser: async (userArray) => {
-    for(let i = 0; i < userArray.length; i++){
+    for (let i = 0; i < userArray.length; i++) {
       const existMail = await User.findOne({
         where: {
           email: userArray[i].correo,
         },
       });
-      if (existMail) throw new Error("El correo electronico ingresado ya existe: "+userArray[i].correo);
+      if (existMail)
+        throw new Error(
+          "El correo electronico ingresado ya existe: " + userArray[i].correo
+        );
     }
-    const usuarios = userArray.map(u => {
+    const usuarios = userArray.map((u) => {
       return {
-        name:u.nombres,
-        lastname:u.apellidos,
-        email:u.correo,
-        password:encryptPassword(u.clave.toString()),
-        phone:u.telefono,
+        name: u.nombres,
+        lastname: u.apellidos,
+        email: u.correo,
+        password: encryptPassword(u.clave.toString()),
+        phone: u.telefono,
         serial: uuidv4(),
-    }})
+      };
+    });
     await User.bulkCreate(usuarios);
+    for (let i = 0; i < usuarios.length; i++) {
+      sendMailQRCode(usuarios[i]);
+      console.log(usuarios[i]);
+    }
     return "Usuarios creados exitosamente";
   },
   createNotification: async (body) => {
@@ -46,14 +62,17 @@ module.exports = {
     user.addNotification(notification);
     return "Notificacion creada exitosamente";
   },
-  generateKey: async ({userId, serviceId, plan}) => {
-    const user = await User.findByPk(userId, {include:[{model:Apikey}]})
-    if(!user) throw new Error("El usuario no existe")
-    if(user.apikeys.filter(a => a.serviceId == serviceId).length) throw new Error("Ya tienes un servicio contratado, contacta a soporte para actualizar tu plan")
-    const api = await Apikey.create({serviceId,plan})
-    user.addApikey(api)
-    return api
-},
+  generateKey: async ({ userId, serviceId, plan }) => {
+    const user = await User.findByPk(userId, { include: [{ model: Apikey }] });
+    if (!user) throw new Error("El usuario no existe");
+    if (user.apikeys.filter((a) => a.serviceId == serviceId).length)
+      throw new Error(
+        "Ya tienes un servicio contratado, contacta a soporte para actualizar tu plan"
+      );
+    const api = await Apikey.create({ serviceId, plan });
+    user.addApikey(api);
+    return api;
+  },
   getUser: async (id) => {
     const user = await User.findByPk(id, {
       include: [
@@ -209,16 +228,32 @@ module.exports = {
     return "Historial agregado exitosamente";
   },
   getUserBySerial: async (serial) => {
-    const user = await User.findOne({where:{serial}});
+    const user = await User.findOne({ where: { serial } });
     if (!user) throw new Error("El usuario buscado no existe");
     return user;
   },
   readAllNotification: async (userId) => {
-    const notifications = await Notification.findAll({ where: { userId: userId } });
-    for(let i = 0; i < notifications.length;i++){
-      notifications[i].read = true
-      notifications[i].save()
+    const notifications = await Notification.findAll({
+      where: { userId: userId },
+    });
+    for (let i = 0; i < notifications.length; i++) {
+      notifications[i].read = true;
+      notifications[i].save();
     }
     return "Todas las notificaciones fueron marcadas como leidas";
+  },
+  editUser: async (data) => {
+    const user = await User.findOne({
+      where: {
+        id: data.id,
+      },
+    });
+    if (user) {
+      for (const key in data) {
+        user[key] = data[key];
+      }
+      await user.save();
+      return user;
+    } else return "No encontramos el usuario";
   },
 };

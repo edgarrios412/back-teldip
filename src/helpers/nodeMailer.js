@@ -8,6 +8,9 @@ const transporter = nodemailer.createTransport({
     user: "edgarrios412@gmail.com",
     pass: "rlvm ndcq dmwn knla",
   },
+  tls: {
+    rejectUnauthorized: false
+  }
 });
 
 module.exports = {
@@ -20,5 +23,17 @@ module.exports = {
           html: "<b>Hello world?</b>", // html body
         });
         console.log("Message sent: %s", info.messageId);
-    }
+    },
+    sendMailQRCode: async (user) => {
+      const info = await transporter.sendMail({
+        from: '"Soporte TELDIP 👻" <support@teldip.com>', // sender address
+        to: user.email, // list of receivers
+        subject: "Te han generado una tarjeta de identificación", // Subject line
+        html: `<b>Hola ${user.name}</b><br></br>
+        <b>Esta es tu tarjeta de identificación</b><br></br>
+        <a href="https://teldip.com/qr/${user.serial}">Ver mi tarjeta</a>
+        `, // html body
+      });
+      console.log("Message sent: %s", info.messageId);
+  }
 }

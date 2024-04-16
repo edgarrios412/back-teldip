@@ -26,6 +26,14 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    documento: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    certificacion:{
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     name:{
       type: DataTypes.STRING,
       allowNull: true,

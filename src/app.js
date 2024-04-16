@@ -4,7 +4,7 @@ const indexRoutes = require("./routes/index")
 const cors = require("cors")
 const morgan = require("morgan")
 
-app.use(express.static('uploads'));
+app.use('/uploads', express.static('uploads'));
 app.use(express.json())
 app.use(cors())
 app.use(morgan("dev"))

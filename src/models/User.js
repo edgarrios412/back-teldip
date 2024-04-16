@@ -15,7 +15,6 @@ module.exports = (sequelize) => {
     image: {
       type: DataTypes.STRING,
       allowNull: true,
-      defaultValue:"https://us.123rf.com/450wm/salamatik/salamatik1801/salamatik180100019/92979836-perfil-an%C3%B3nimo-icono-de-la-cara-persona-silueta-gris-avatar-masculino-por-defecto-foto-de.jpg"
     },
     role: {
       type: DataTypes.INTEGER,

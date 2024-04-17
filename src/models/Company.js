@@ -10,6 +10,9 @@ module.exports = (sequelize) => {
     nombre: {
       type: DataTypes.STRING,
       allowNull: true,
+      set(value) {
+        this.setDataValue('nombre', value.trim().toUpperCase());
+      },
     },
     logo: {
       type: DataTypes.STRING,
@@ -22,6 +25,9 @@ module.exports = (sequelize) => {
     direccion: {
       type: DataTypes.STRING,
       allowNull: true,
+      set(value) {
+        this.setDataValue('direccion', value.trim().toUpperCase());
+      },
     },
     owner:{
         type:DataTypes.INTEGER,

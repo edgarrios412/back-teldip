@@ -36,10 +36,16 @@ module.exports = (sequelize) => {
     name:{
       type: DataTypes.STRING,
       allowNull: true,
+      set(value) {
+        this.setDataValue('name', value.trim().toUpperCase());
+      },
     },
     lastname:{
       type: DataTypes.STRING,
       allowNull: true,
+      set(value) {
+        this.setDataValue('lastname', value.trim().toUpperCase());
+      },
     },
     email:{
       type: DataTypes.STRING,

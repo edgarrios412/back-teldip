@@ -59,7 +59,7 @@ fileRoutes.post("/excelToJson/createUsers", upload.single("file"), async (req, r
       apiKey.usage += jsonFile.length
       apiKey.save() 
       
-    const usuarios = await bulkCreateUser(jsonFile);
+    const usuarios = await bulkCreateUser(jsonFile, req.body.companyId);
     res.status(200).json(usuarios);
   } catch (e) {
     res.status(400).json(e.message);

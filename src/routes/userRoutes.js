@@ -1,6 +1,7 @@
 const {Router} = require("express")
 const userRoutes = Router()
-const {newUser,getUserBySerial, readAllNotification, verifyUser, authUser, putUser, getUsers, getUser, getUserByToken, deleteUser, createTicket, changePassword, createNotification, addHistorial, setResponseTicket, getTickets, generateKey, editUser} = require("../controllers/userController")
+const {Apikey} = require("../db")
+const {newUser,getUserBySerial, readAllNotification, verifyUser, authUser, putUser, getUsers, getUser, getUserByToken, deleteUser, createTicket, changePassword, createNotification, addHistorial, setResponseTicket, getTickets, generateKey, editUser, createUserByUser} = require("../controllers/userController")
 const { sendMail } = require("../helpers/nodeMailer")
 
 userRoutes.get("/", async (req,res) => {
@@ -95,6 +96,40 @@ userRoutes.post("/", async (req,res) => {
         res.json({users:user})
     }
     catch(error){
+        res.status(403).json(error.message)
+    }
+})
+
+userRoutes.post("/createByUser", async (req,res) => {
+    try {
+        if (!req.headers.authorization) {
+            return res
+              .status(403)
+              .send("Tu petición no tiene cabecera de autorización");
+          }
+          const api = req.headers.authorization.split(" ").at(-1);
+          //   const payload = jwt.verify(token, KEY);
+          const apiKey = await Apikey.findOne({ where: { key: api } });
+          if(!apiKey){
+            return res
+              .status(403)
+              .send("La proporcionada API KEY no es válida");
+          }
+          if(apiKey.plan == "BASICO" && apiKey.usage+1 > 100){
+            return res
+              .status(403)
+              .send("No puedes superar el límite de QRs adquiridos");
+          }
+          else if(apiKey.plan == "PROFESIONAL" && apiKey.usage+1 > 1000){
+            return res
+              .status(403)
+              .send("No puedes superar el límite de QRs adquiridos");
+          }
+          apiKey.usage += 1
+          apiKey.save() 
+        const user = await createUserByUser(req.body)
+        res.json(user)
+    } catch (error) {
         res.status(403).json(error.message)
     }
 })

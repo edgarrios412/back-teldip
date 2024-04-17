@@ -30,7 +30,7 @@ let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { User, Userlog, Ticket, Historypay, Notification, Apikey} = sequelize.models;
+const { User, Userlog, Ticket, Historypay, Notification, Apikey, Company} = sequelize.models;
 
 // const packChar = sequelize.define('pack_char', {
 //   // Definición de otros campos de la tabla intermedia
@@ -43,6 +43,18 @@ const { User, Userlog, Ticket, Historypay, Notification, Apikey} = sequelize.mod
 
 User.hasMany(Ticket)
 Ticket.belongsTo(User)
+
+Company.hasMany(User)
+User.belongsTo(Company)
+
+User.hasOne(Company, {
+  foreignKey: 'owner',
+  as:"micompany"
+})
+
+// Company.belongsTo(User, {
+//   foreignKey: 'owner',
+//  });
 
 User.hasMany(Userlog)
 Userlog.belongsTo(User)

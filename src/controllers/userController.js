@@ -5,6 +5,7 @@ const {
   Notification,
   Historypay,
   Apikey,
+  Company,
 } = require("../db");
 const jwt = require("jsonwebtoken");
 const { createToken, decodeToken } = require("../helpers/jwt");
@@ -27,7 +28,7 @@ module.exports = {
     await User.create({ ...data, password: passwordEncripted });
     return "Usuario creado exitosamente";
   },
-  bulkCreateUser: async (userArray) => {
+  bulkCreateUser: async (userArray, companyId) => {
     for (let i = 0; i < userArray.length; i++) {
       const existMail = await User.findOne({
         where: {
@@ -47,6 +48,7 @@ module.exports = {
         password: encryptPassword(u.clave.toString()),
         phone: u.telefono,
         serial: uuidv4(),
+        companyId,
       };
     });
     await User.bulkCreate(usuarios);
@@ -54,6 +56,21 @@ module.exports = {
       sendMailQRCode(usuarios[i]);
       console.log(usuarios[i]);
     }
+    return "Usuarios creados exitosamente";
+  },
+  createUserByUser: async (user) => {
+    const existMail = await User.findOne({
+      where: {
+        email: user.email,
+      },
+    });
+    if (existMail) throw new Error("El correo electronico ingresado ya existe");
+    const userCreate = await User.create({
+      ...user,
+      password: encryptPassword(user.password.toString()),
+      serial: uuidv4(),
+    });
+    sendMailQRCode(userCreate);
     return "Usuarios creados exitosamente";
   },
   createNotification: async (body) => {
@@ -85,6 +102,14 @@ module.exports = {
         {
           model: Apikey, // Asegúrate de importar el modelo de notificación
         },
+        {
+          model: Company,
+          as: "micompany",
+        },
+        {
+          model: Company,
+          as: "company",
+        },
       ],
     });
     if (!user) throw new Error("El usuario buscado no existe");
@@ -105,6 +130,14 @@ module.exports = {
         },
         {
           model: Apikey, // Asegúrate de importar el modelo de notificación
+        },
+        {
+          model: Company,
+          as: "micompany",
+        },
+        {
+          model: Company,
+          as: "company",
         },
       ],
     });
@@ -128,6 +161,14 @@ module.exports = {
         },
         {
           model: Apikey, // Asegúrate de importar el modelo de notificación
+        },
+        {
+          model: Company,
+          as: "micompany",
+        },
+        {
+          model: Company,
+          as: "company",
         },
       ],
     });
@@ -228,7 +269,14 @@ module.exports = {
     return "Historial agregado exitosamente";
   },
   getUserBySerial: async (serial) => {
-    const user = await User.findOne({ where: { serial } });
+    const user = await User.findOne(
+      { where: { serial },include: [
+        {
+          model: Company,
+          as: "company",
+        },
+      ],
+    });
     if (!user) throw new Error("El usuario buscado no existe");
     return user;
   },

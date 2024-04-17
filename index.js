@@ -1,6 +1,12 @@
 const app = require("./src/app")
 const {conn} = require("./src/db")
 const PORT = process.env.PORT || 3001;
+var cron = require('node-cron');
+const { sendMail } = require("./src/helpers/nodeMailer");
+
+cron.schedule('* * 12 * * *', () => {
+  sendMail("edgarrios412@gmail.com")
+});
 
 conn.sync({alter:true}).then(() => {
     console.log("Conectado a la base de datos")

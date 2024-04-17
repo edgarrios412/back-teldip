@@ -18,11 +18,9 @@ module.exports = {
         const info = await transporter.sendMail({
           from: '"Soporte TELDIP 👻" <support@teldip.com>', // sender address
           to: email, // list of receivers
-          subject: "Hello ✔", // Subject line
-          text: "Hello world?", // plain text body
-          html: "<b>Hello world?</b>", // html body
+          subject: "Node-cron ejecutado", // Subject line
+          html: "<b>Para avisarte que el node cron fue ejecutado exitosamente</b>", // html body
         });
-        console.log("Message sent: %s", info.messageId);
     },
     sendMailQRCode: async (user) => {
       const info = await transporter.sendMail({

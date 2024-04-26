@@ -13,4 +13,16 @@ const storage = multer.diskStorage({
   
 const upload = multer({ storage, limits: { fileSize: MAX_MB_SIZE_FILE * 1048576 } });
 
-module.exports = upload
+const fileToBase64 = () => {
+
+}
+
+const base64ToFile = () => {
+
+}
+
+module.exports = {
+  upload,
+  fileToBase64,
+  base64ToFile
+}

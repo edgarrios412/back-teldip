@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const {Apikey} = require("../db")
-const upload = require("../helpers/multer");
+const {upload} = require("../helpers/multer");
 const { excelToJson } = require("../helpers/excel");
 const { newUser, bulkCreateUser } = require("../controllers/userController");
 const fileRoutes = Router();

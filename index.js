@@ -7,7 +7,7 @@ const { sendMail } = require("./src/helpers/nodeMailer");
 cron.schedule('* * 12 * * *', () => {
     // VERIFICAR LOS CORREOS CON CUENTA FREE Y ENVIARLES
     // UN CORREO CUANDO SE USEN LOS 14 DIAS GRATUITOS 
-  sendMail("edgarrios412@gmail.com")
+//   sendMail("edgarrios412@gmail.com")
 });
 
 conn.sync({alter:true}).then(() => {
